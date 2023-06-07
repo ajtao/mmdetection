@@ -134,7 +134,11 @@ class BaseDetector(BaseModule, metaclass=ABCMeta):
         for img, img_meta in zip(imgs, img_metas):
             batch_size = len(img_meta)
             for img_id in range(batch_size):
-                img_meta[img_id]['batch_input_shape'] = tuple(img.size()[-2:])
+                try:
+                    img_meta[img_id]['batch_input_shape'] = tuple(img.size()[-2:])
+                    # breakpoint()
+                except:
+                    breakpoint()
 
         if num_augs == 1:
             # proposals (List[List[Tensor]]): the outer list indicates
@@ -277,11 +281,11 @@ class BaseDetector(BaseModule, metaclass=ABCMeta):
                     img,
                     result,
                     score_thr=0.3,
-                    bbox_color=(72, 101, 241),
+                    bbox_color=(255, 101, 241),
                     text_color=(72, 101, 241),
                     mask_color=None,
                     thickness=2,
-                    font_size=13,
+                    font_size=18,
                     win_name='',
                     show=False,
                     wait_time=0,

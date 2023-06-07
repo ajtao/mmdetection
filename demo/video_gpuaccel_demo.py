@@ -36,6 +36,7 @@ def parse_args():
         type=float,
         default=1,
         help='The interval of show (s), 0 is block')
+    parser.add_argument('--max-frames', type=int)
     args = parser.parse_args()
     return args
 
@@ -88,6 +89,7 @@ def main():
     if args.out:
         video_writer = ffmpegcv.VideoWriter(args.out, fps=video_origin.fps)
 
+    fnum = 0
     with torch.no_grad():
         for frame_resize, frame_origin in zip(
                 mmcv.track_iter_progress(video_resize), video_origin):
@@ -100,6 +102,10 @@ def main():
                 mmcv.imshow(frame_mask, 'video', args.wait_time)
             if args.out:
                 video_writer.write(frame_mask)
+
+            fnum += 1
+            if args.max_frames is not None and fnum == args.max_frames:
+                break
 
     if video_writer:
         video_writer.release()

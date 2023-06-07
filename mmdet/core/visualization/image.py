@@ -119,7 +119,8 @@ def draw_labels(ax,
                 color='w',
                 font_size=8,
                 scales=None,
-                horizontal_alignment='left'):
+                horizontal_alignment='left',
+                show_score=False):
     """Draw labels on the axes.
 
     Args:
@@ -140,7 +141,7 @@ def draw_labels(ax,
     for i, (pos, label) in enumerate(zip(positions, labels)):
         label_text = class_names[
             label] if class_names is not None else f'class {label}'
-        if scores is not None:
+        if scores is not None and show_score:
             label_text += f'|{scores[i]:.02f}'
         text_color = color[i] if isinstance(color, list) else color
 
@@ -157,7 +158,7 @@ def draw_labels(ax,
             },
             color=text_color,
             fontsize=font_size_mask,
-            verticalalignment='top',
+            verticalalignment='bottom',
             horizontalalignment=horizontal_alignment)
 
     return ax

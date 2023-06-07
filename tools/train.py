@@ -55,6 +55,8 @@ def parse_args():
         help='id of gpu to use '
         '(only applicable to non-distributed training)')
     parser.add_argument('--seed', type=int, default=None, help='random seed')
+    parser.add_argument('--tag', type=str, default=None,
+                        help='to help name the output dir')
     parser.add_argument(
         '--diff-seed',
         action='store_true',
@@ -144,8 +146,11 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
-        cfg.work_dir = osp.join('./work_dirs',
-                                osp.splitext(osp.basename(args.config))[0])
+        name = osp.splitext(osp.basename(args.config))[0]
+        timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
+        cfg.work_dir = f'/mnt/g/output/mmdet/{name}_{timestamp}'
+        if args.tag is not None:
+            cfg.work_dir += f'_{args.tag}'
 
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
